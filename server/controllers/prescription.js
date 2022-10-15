@@ -5,6 +5,9 @@ const Doc = require("../models/doctor");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("../config/nodemailer");
 
+const uploadFile = require('../utility/fileUpload')
+const presignedURL = require('../utility/presignedUrl')
+
 const createPrescription = async (req, res) => {
     // todo file upload to S3 and gen presigned url
 

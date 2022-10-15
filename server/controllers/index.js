@@ -6,5 +6,7 @@ module.exports = {
     loginDoc: auth.loginDoc,
     createPrescription: presc.createPrescription,
     loginPatientByMagicLink: auth.loginPatientByMagicLink,
-    getAllPresc: presc.getAllPresc
+    getAllPresc: presc.getAllPresc,
+    loginPatient: auth.loginPatient,
+    updatePassword: auth.updatePassword
 }
