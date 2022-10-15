@@ -28,12 +28,28 @@ checkDuplicateEmail = async (req, res, next) => {
 
     try {
         const email = req.body.email;
+        const plainTextPassword = req.body.password;
         const userWithSameEmail = await User.findOne({ email: email })
+
+        if (!plainTextPassword || typeof plainTextPassword !== 'string') {
+            res.status(400).send({ status: 'error', message: 'Invalid password' })
+            return;
+        }
+
+        if (plainTextPassword.length < 8) {
+            res.status(400).send({
+                status: 'error',
+                message: 'Password too small. Should be atleast 8 characters'
+            })
+            return;
+        }
 
         if (!email || typeof email !== 'string' || !isEmailValid(email)) {
             res.status(400).send({ status: 'error', message: 'Invalid email' })
             return;
         }
+
+
 
         if (userWithSameEmail) {
             res.status(400).send({ status: "error", message: "Email already associated!" });
