@@ -108,8 +108,50 @@ const loginPatientByMagicLink = async (req, res) => {
     }
 };
 
-const loginPat = async (req, res) => {
+const loginPatient = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
 
-}
+    if (!email) {
+        return res.status(401).send({ message: "Invalid email/password" });
+    }
 
-module.exports = { registerDoc, loginDoc, loginPatientByMagicLink };
+    const user = await Patient.findOne({ Email: email });
+    if (!user) {
+        return res.status(401).send({ message: "Invalid email/password" });
+    }
+
+    if (await bcrypt.compare(password, user.Password)) {
+        const token = jwt.sign(
+            {
+                id: user._id,
+                email: user.Email,
+                name: user.Name,
+            },
+            process.env.ACCESS_TOKEN_SECRET
+        );
+        return res.status(200).send({
+            message: "User LoggedIn Successfully",
+            id: user._id,
+            token: token,
+            email: user.Email,
+            name: user.Name,
+        });
+    }
+    res.status(401).send({ message: "Invalid email/password" });
+};
+
+const updatePassword = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const password = await bcrypt.hash(req.body.password, 10);
+        await Patient.findByIdAndUpdate(id, { Password: password });
+        return res.status(200).send({
+            message: "Password Updated Successfully",
+        });
+    } catch (error) {
+        return res.status(503).json({ message: error });
+    }
+};
+
+module.exports = { registerDoc, loginDoc, loginPatientByMagicLink, loginPatient, updatePassword };
