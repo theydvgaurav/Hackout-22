@@ -108,4 +108,8 @@ const loginPatientByMagicLink = async (req, res) => {
     }
 };
 
+const loginPat = async (req, res) => {
+
+}
+
 module.exports = { registerDoc, loginDoc, loginPatientByMagicLink };
