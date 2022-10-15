@@ -6,7 +6,12 @@ module.exports = {
     loginDoc: auth.loginDoc,
     createPrescription: presc.createPrescription,
     loginPatientByMagicLink: auth.loginPatientByMagicLink,
-    getAllPresc: presc.getAllPresc,
+    getAllPrescForPatient: presc.getAllPrescForPatient,
     loginPatient: auth.loginPatient,
-    updatePassword: auth.updatePassword
+    updatePassword: auth.updatePassword,
+    getAllDocs: presc.getAllDocs,
+    getAllPrescForDoc: presc.getAllPrescForDoc,
+    getAllPatients: presc.getAllPatients,
+    getPrecsByDocId: presc.getPrecsByDocId,
+    getPrecsByPatId: presc.getPrecsByPatId
 }

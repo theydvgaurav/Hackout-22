@@ -16,8 +16,23 @@ router.post('/create-presc', [middlewares.verifyDocToken.tokenValidation], [cont
 // login a patient
 router.post('/login-pat/:token', [controllers.loginPatientByMagicLink])
 
-// get all docs for a patient
-router.get('/get-docs', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPresc])
+// get all doctors for a patient
+router.get('/get-docs', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllDocs])
+
+//get all prescriptions for a patient
+router.get('/get-presc', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPrescForPatient])
+
+// get all patients for a doctor
+router.get('/get-patients', [middlewares.verifyDocToken.tokenValidation], [controllers.getAllPatients])
+
+// get all prescriptions sent for a doctor
+router.get('/get-presc-doc', [middlewares.verifyDocToken.tokenValidation], [controllers.getAllPrescForDoc])
+
+// get all prescriptions sent to a particular patient 
+router.get('/get-doc-presc/:doctorId', [middlewares.verifyUserToken.tokenValidation], [controllers.getPrecsByDocId])
+
+// get all prescriptions sent by a particular doctor
+router.get('/get-pat-presc/:patientId', [middlewares.verifyDocToken.tokenValidation], [controllers.getPrecsByPatId])
 
 // login a patient
 router.post('/login-pat', [controllers.loginPatient])
