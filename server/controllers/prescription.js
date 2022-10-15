@@ -87,6 +87,7 @@ const createPrescription = async (req, res) => {
         
         if(url_generate_resp.status == 1){
             console.log('Presigned Url generated successfully.\n') ;
+            console.log(url_generate_resp.data) ;
             presignedUrls.push(url_generate_resp.data) ;
         }
         else{

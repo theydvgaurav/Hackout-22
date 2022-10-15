@@ -15,7 +15,7 @@ let s3 = new AWS.S3({
 });
 
 
-const getPresignedUrl = (keyname, expiryTime = 5184000) => {
+const getPresignedUrl = (keyname, expiryTime = 518400) => {
   try {
     const presignedURL = s3.getSignedUrl('getObject', {
       Bucket: process.env.R2_BUCKET_NAME,
