@@ -10,4 +10,7 @@ router.post('/register-doc', [middlewares.verifyDocEmail.checkDuplicateEmail], [
 // login a doc
 router.post('/login-doc', [controllers.loginDoc]);
 
+// create a prescription
+router.post('/create-presc', [middlewares.verifyDocToken.tokenValidation], [controllers.createPrescription])
+
 module.exports = router
