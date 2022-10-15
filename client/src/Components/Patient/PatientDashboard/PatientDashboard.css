@@ -1,0 +1,11 @@
+.updatePassword {
+    cursor: pointer;
+}
+
+.doctorListHeader {
+    font-size: 28px;
+    align-items: center;
+    padding: 15px 10px;
+    display: flex;
+    justify-content: center;
+}
