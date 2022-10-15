@@ -7,16 +7,15 @@ const PrescriptionDetails = () => {
   const params = useParams();
 
   const [prescriptionsArray, setPrescriptionsArray] = useState([]);
-
-  const auth = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGFiNGVmNmRjMjI3ZTU0NDczMTYxZSIsImVtYWlsIjoiZmhkZ3NoQGpoamYuZmRnamRmIiwibmFtZSI6IkFOdWoiLCJpYXQiOjE2NjU4NTIzMzl9.c2zqpLpfsPnmViZ29FjNBo9pWNTafUrCusV0hubg_zY';
-
+  const userInfo = JSON.parse(localStorage.getItem("patientInformation"));
+  
   const getData = async () => {
     const config = {
       method: 'get',
       url: `http://localhost:5000/get-doc-presc/${params.id}`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: auth
+        Authorization: `Bearer ${userInfo.token}`
       }
     };
     axios(config).then(res => {

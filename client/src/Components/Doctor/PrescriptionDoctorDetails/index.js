@@ -34,7 +34,7 @@ const PrescriptionDoctorDetails = () => {
     //     url: 'http://localhost:5000/create-presc',
     //     headers: {
     //         'Content-Type': 'application/json',
-    //         Authorization: auth
+    //         Authorization: `Bearer ${doctorInfo.token}`
     //     },
     //     data: formData
     // };
@@ -48,7 +48,6 @@ const PrescriptionDoctorDetails = () => {
     //         console.log(error);
     //     });
 
-    // console.log(description);
   }
 
   const getData = async () => {
@@ -61,7 +60,6 @@ const PrescriptionDoctorDetails = () => {
       }
     };
     axios(config).then(res => {
-      // console.log(res.data.data);
       setPrescriptionsArray(res.data.data)
     }).catch(err => {
       console.log(err);
