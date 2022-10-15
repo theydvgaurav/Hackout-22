@@ -41,19 +41,52 @@ const registerDoc = async (req, res) => {
             const token = jwt.sign(
                 {
                     id: data._id,
-                    email: data.Email
+                    email: data.Email,
+                    name: data.Name
                 },
                 process.env.ACCESS_TOKEN_SECRET
             )
 
             return res.status(200).send({
-                id: data._id, token: token, email: data.Email, name: data.Name
+                message: "User Created Successfully", id: data._id, token: token, email: data.Email, name: data.Name
             });
         }
     )
         .catch(error => {
-            return res.status(503).json(error)
+            return res.status(503).json({ message: error })
         })
 }
 
-module.exports = { registerDoc, registerPatient }
+const loginDoc = async (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+
+    if (!email) {
+        return res.status(401).send({ message: 'Invalid email/password' })
+    }
+
+    const user = await Doc.findOne({ Email: email })
+    if (!user) {
+
+        return res.status(401).send({ message: 'Invalid email/password' })
+    }
+
+    if (await bcrypt.compare(password, user.Password)) {
+
+        const token = jwt.sign(
+            {
+                id: user._id,
+                email: user.Email,
+                name: user.Name
+            },
+            process.env.ACCESS_TOKEN_SECRET
+        )
+        return res.status(200).send({
+            message: "User LoggedIn Successfully", id: user._id, token: token, email: user.Email, name: user.Name
+        })
+    }
+    res.status(401).send({ message: 'Invalid email/password' })
+
+}
+
+module.exports = { registerDoc, registerPatient, loginDoc }
