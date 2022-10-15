@@ -1,0 +1,92 @@
+.mainHeader {
+    width: 100%;
+    height: 80px;
+    font-size: 36px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid black;
+}
+
+.newPatient {
+    padding: 20px 15px;
+    background-color: black;
+    color: white;
+    font-size: 26px;
+    width: max-content;
+    margin: 20px 0 0 20px;
+    cursor: pointer;
+}
+
+.fileUpload {
+    margin: 30px 0 0 30px;
+    /* height: 200px;  */
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.uploadButton {
+    padding: 20px 15px;
+    
+    border: 3px solid black;
+    width: max-content;
+    min-width: 200px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.inputNameBox {
+    margin-bottom: 20px;
+}
+
+.inputNameBox  > input {
+    width: 500px;
+    height: 20px;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.inputEmailBox {
+    margin-bottom: 20px;
+}
+
+.inputEmailBox  > input {
+    width: 500px;
+    height: 20px;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.inputDescriptionBox {
+    margin-bottom: 20px;
+}
+
+.inputDescriptionBox > textarea {
+    width: 500px;
+    height: 60px;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.clientDetails {
+    margin-top: 20px;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.patientDetails {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 600;
+}
