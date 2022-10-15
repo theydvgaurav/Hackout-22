@@ -1,12 +1,34 @@
 require("dotenv").config();
-const Presc = require("../models/prescription");
+const Prescription = require("../models/prescription");
 const Patient = require("../models/user");
 const Doc = require("../models/doctor");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("../config/nodemailer");
+const fs = require("fs");
 
 const createPrescription = async (req, res) => {
-    // todo file upload to S3 and gen presigned url
+    // todo file upload to R2 Bucket and generate presigned url
+    const files = req.files;
+    console.log(files) ;
+
+    const attachments_path =  [] ;
+    const media_dir = process.env.MEDIA_DIR
+    for (const file of files){
+        fileData = file.data ;
+        fileType = file.mimetype ;
+        fileName = file.name ;
+        filePath = media_dir + "/" + fileName ;
+
+        // save the file by writing all the data into it
+        fs.writeFile(filePath, fileData, (err) => {
+            if (err)
+              console.log(err);
+            else {
+              console.log("File saved successfully.\n");
+            }
+        });
+
+    }
 
     const token = jwt.sign(
         {
@@ -29,7 +51,7 @@ const createPrescription = async (req, res) => {
         PatientId = newUser.id;
     }
 
-    const newPresc = new Presc({
+    const newPresc = new Prescription({
         PatientId: PatientId,
         DoctorId: req.doc.id,
         PresignedUrl: "",
@@ -51,7 +73,7 @@ const createPrescription = async (req, res) => {
 
 const getAllPresc = async (req, res) => {
     try {
-        const allDocs = await Presc.find({ PatientId: req.user.id }).distinct(
+        const allDocs = await Prescription.find({ PatientId: req.user.id }).distinct(
             "DoctorId"
         );
         const docDetails = await Doc.find()
