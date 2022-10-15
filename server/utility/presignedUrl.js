@@ -1,3 +1,4 @@
+require("dotenv").config();
 var AWS = require("aws-sdk");
 const fs = require("fs");
 
@@ -14,7 +15,7 @@ let s3 = new AWS.S3({
 });
 
 
-const getPresignedUrl = (keyname, expiryTime = 172800) => {
+const getPresignedUrl = (keyname, expiryTime = 5184000) => {
   try {
     const presignedURL = s3.getSignedUrl('getObject', {
       Bucket: process.env.R2_BUCKET_NAME,
@@ -22,9 +23,9 @@ const getPresignedUrl = (keyname, expiryTime = 172800) => {
       Expires: expiryTime
     });
 
-    return presignedURL;
+    return {"status": 1 , "data" :  presignedURL };
   } catch (error) {
-    return error;
+    return {"status": 0 , "error" :  error };
   }
 };
 

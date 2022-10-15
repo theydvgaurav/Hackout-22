@@ -11,7 +11,7 @@ const PrescriptionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Doctors'
     },
-    PresignedUrl: {
+    AttachmentsPath: {
         type: [String],
         default: []
     },

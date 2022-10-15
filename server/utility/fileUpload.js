@@ -1,3 +1,4 @@
+require("dotenv").config();
 var AWS = require("aws-sdk");
 const fs = require("fs");
 
@@ -19,20 +20,26 @@ const getLastItem = filePath => filePath.substring(filePath.lastIndexOf('/') + 1
 const uploadFile = (filePath, contentType, userId) => {
     try {
         const fileName = getLastItem(filePath);
-        keyName = userId + '/' + fileName;
-        fileData = fs.readFileSync(filePath);
+        const keyName = userId + '/' + fileName;
+        const fileData = fs.readFileSync(filePath);
 
         s3.putObject({
             Bucket: process.env.R2_BUCKET_NAME,
             Key: keyName,
             Body: fileData,
             "ContentType": contentType
+        }, (error, success) => {
+            if(error) console.log(error) ;
+            console.log(success) ;
         })
-        return keyName;
+
+        return  {"status": 1, "data" :  keyName }
+      
 
     } catch (error) {
-        return error
+        return {"status": 0 , "error" :  error }
     }
 }
+
 
 module.exports = { uploadFile }
