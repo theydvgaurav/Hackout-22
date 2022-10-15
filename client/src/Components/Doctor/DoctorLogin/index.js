@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { axios } from 'axios';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './DoctorLogin.css'
 
@@ -8,22 +8,35 @@ const DoctorLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    useEffect(()=> {
+        const userInfo = JSON.parse(localStorage.getItem("doctorInformation"));
+        if(userInfo)
+            history('/doctor-portal')
+    },[history])
+
     const submitForm = async (e) => {
         e.preventDefault();
+
+        const data = JSON.stringify({ email, password });
+
         const config = {
+            method: 'post',
+            url: 'http://localhost:5000/login-doc',
             headers: {
-                "Content-type": "application/json",
+                'Content-Type': 'application/json'
             },
+            data: data
         };
 
-        // const { data } = await axios.post('/api/users/',
-        //     { name, email, password },
-        //     config
-        // );
-        // updateUserInfo(data);
-        // localStorage.setItem("userInformation", JSON.stringify(data));
-
-        // history('/notes');
+        axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                localStorage.setItem("doctorInformation", JSON.stringify(response.data));
+                history('/doctor-portal')
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     const _loginRedirect = () => {
@@ -35,10 +48,20 @@ const DoctorLogin = () => {
             <div className='heading'>Login Screen</div>
             <form onSubmit={submitForm}>
                 <div className='inputContainer'>
-                    <input type="email" placeholder='Email' onChange={(e) => setEmail(e.target.value)} />
+                    <input 
+                        type="email" 
+                        placeholder='Email' 
+                        required
+                        onChange={(e) => setEmail(e.target.value)} 
+                    />
                 </div>
                 <div className='inputContainer'>
-                    <input type="password" placeholder='Password' onChange={e => setPassword(e.target.value)} />
+                    <input 
+                        type="password" 
+                        placeholder='Password' 
+                        required
+                        onChange={e => setPassword(e.target.value)} 
+                    />
                 </div>
                 <button className='button'>Submit</button>
             </form>

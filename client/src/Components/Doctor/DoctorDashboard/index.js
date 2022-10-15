@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileUploader } from "react-drag-drop-files";
+import { useNavigate } from 'react-router-dom';
 import PatientDetailsCard from '../PatientDetailsCard';
 import './DoctorDashboard.css';
 
 const DoctorDashboard = () => {
+    const history = useNavigate();
     const [openModal, setOpenModal] = useState(false);
     const [filesArray, setFilesArray] = useState([]);
     const [email, setEmail] = useState('');
@@ -26,10 +28,24 @@ const DoctorDashboard = () => {
         console.log(description);
     }
 
+    const userInfo = JSON.parse(localStorage.getItem("doctorInformation"));
+
+    useEffect(() => {
+        if (!userInfo) {
+            history("/doctor-login");
+        }
+    }, [history])
+
+    const _onLogOut = () => {
+        localStorage.removeItem("doctorInformation");
+        history("/doctor-login");
+    }
+
     return (
         <div className='mainDashboardContainer'>
             <div className='mainHeader'>
-                Doctor-Portal
+                <div className='mainHeaderName'>Doctor-Portal</div>
+                {userInfo && <div className='mainHeaderSignOut' onClick={_onLogOut}>Sign Out</div>}
             </div>
             <div className='secondContainer'>
                 <div className='newPatient' onClick={() => setOpenModal(!openModal)}>
@@ -38,27 +54,27 @@ const DoctorDashboard = () => {
                 {
                     openModal ? <div className='fileUpload'>
                         <div className='inputNameBox'>
-                            <input 
-                                type="text" 
-                                onChange={e => setName(e.target.value)} 
-                                placeholder="Name" 
+                            <input
+                                type="text"
+                                onChange={e => setName(e.target.value)}
+                                placeholder="Name"
                                 required
                             />
                         </div>
                         <div className='inputEmailBox'>
-                            <input 
-                                type="email" 
-                                onChange={e => setEmail(e.target.value)} 
-                                placeholder="Email" 
+                            <input
+                                type="email"
+                                onChange={e => setEmail(e.target.value)}
+                                placeholder="Email"
                                 required
                             />
                         </div>
 
                         <div className='inputDescriptionBox'>
-                            <textarea 
-                                type="text" 
-                                onChange={e => setDescription(e.target.value)} 
-                                placeholder="Description" 
+                            <textarea
+                                type="text"
+                                onChange={e => setDescription(e.target.value)}
+                                placeholder="Description"
                                 required
                             />
                         </div>
@@ -69,7 +85,6 @@ const DoctorDashboard = () => {
                             name="file"
                             types={fileTypes}
                             maxSize="5"
-                            
                         />
                     </div> : null
                 }
