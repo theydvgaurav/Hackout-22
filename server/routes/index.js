@@ -19,5 +19,10 @@ router.post('/login-pat/:token', [controllers.loginPatientByMagicLink])
 // get all docs for a patient
 router.get('/get-docs', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPresc])
 
+// login a patient
+router.post('/login-pat', [controllers.loginPatient])
+
+// update password for patient
+router.post('/update-password', [middlewares.verifyUserToken.tokenValidation], [controllers.updatePassword])
 
 module.exports = router

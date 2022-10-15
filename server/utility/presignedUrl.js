@@ -14,31 +14,18 @@ let s3 = new AWS.S3({
 });
 
 
-const getLastItem = filePath => filePath.substring(filePath.lastIndexOf('/') + 1) ;
+const getPresignedUrl = (keyname, expiryTime = 172800) => {
+  try {
+    const presignedURL = s3.getSignedUrl('getObject', {
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: keyname,
+      Expires: expiryTime
+    });
 
-const uploadFile = (filePath, contentType, userId) => {
-  const fileName = getLastItem(filePath) ;
-  keyName = userId + '/' + fileName ;
-  fileData = fs.readFileSync(filePath) ;
-
-  s3.putObject({
-    Bucket: process.env.R2_BUCKET_NAME,
-    Key: keyName,
-    Body: fileData,
-    "ContentType": contentType
-  }, (error, success) => {
-    if(error) console.log(error) ;
-    console.log(success) ;
-  })
-}
-
-
-const getPresignedUrl = (keyname, expiryTime = 172800) =>  {
-  const presignedURL = s3.getSignedUrl('getObject', {
-    Bucket : process.env.R2_BUCKET_NAME,
-    Key : keyname,
-    Expires : expiryTime
-  }) ;
-
-  return presignedURL ;
+    return presignedURL;
+  } catch (error) {
+    return error;
+  }
 };
+
+module.exports = { getPresignedUrl }
