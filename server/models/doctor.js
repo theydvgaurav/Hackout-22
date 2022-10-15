@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
+const DcotorSchema = new mongoose.Schema({
 
-	Name: { 
+    Name: { 
 		type     : String, 
 		required : false,
 		unique   : false,
@@ -33,29 +33,14 @@ const UserSchema = new mongoose.Schema({
         required : true,
         unique : false
     },
-    RoleType:{
-        type : Number,
-        required : true,
-        unique : false
-    },
     IsActive: {
         type : Boolean,
         default : true
-    }, 
-	MagicLink: { 
-		type     : String, 
-		required : false,
-		unique   : false,
-		default  : uuidv4
-	},
-	MagicLinkExpired: { 
-		type     : Boolean, 
-		default  : false
-	}
+    }
 },
 {strictQuery: false}
 )
 
 
-const Doctors = mongoose.model('Doctors', DoctorSchema);
+const Doctors = mongoose.model('Doctors', DcotorSchema);
 module.exports = Doctors ;

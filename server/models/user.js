@@ -35,11 +35,6 @@ const UserSchema = new mongoose.Schema({
         required : true,
         unique : false
     },
-    RoleType:{
-        type : Number,
-        required : true,
-        unique : false
-    },
     IsActive: {
         type : Boolean,
         default : true
