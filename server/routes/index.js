@@ -16,7 +16,8 @@ router.post('/create-presc', [middlewares.verifyDocToken.tokenValidation], [cont
 // login a patient
 router.post('/login-pat/:token', [controllers.loginPatient])
 
-router.get('/get-pat-prec', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPresc])
+// get all docs for a patient
+router.get('/get-docs', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPresc])
 
 
 module.exports = router
