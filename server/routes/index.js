@@ -14,7 +14,7 @@ router.post('/login-doc', [controllers.loginDoc]);
 router.post('/create-presc', [middlewares.verifyDocToken.tokenValidation], [controllers.createPrescription])
 
 // login a patient
-router.post('/login-pat/:token', [controllers.loginPatient])
+router.post('/login-pat/:token', [controllers.loginPatientByMagicLink])
 
 // get all docs for a patient
 router.get('/get-docs', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPresc])

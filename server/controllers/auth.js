@@ -2,7 +2,7 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Doc = require("../models/doctor");
-const Patient = require('../models/user')
+const Patient = require("../models/user");
 const nodemailer = require("../config/nodemailer");
 
 const registerDoc = async (req, res) => {
@@ -72,38 +72,40 @@ const loginDoc = async (req, res) => {
     res.status(401).send({ message: "Invalid email/password" });
 };
 
-const loginPatient = async (req, res) => {
-
-    Patient.findOne({
-        MagicLink: req.params.token
-    })
-        .then((user) => {
-            if (!user) {
-                return res.status(404).send({ message: "User Not found." });
-            }
-
-            const token = jwt.sign(
-                {
-                    id: user._id,
-                    email: user.Email,
-                    name: user.Name,
-                },
-                process.env.ACCESS_TOKEN_SECRET
-            );
-            return res.status(200).send({
-                message: "User LoggedIn Successfully",
-                id: user._id,
-                token: token,
-                email: user.Email,
-                name: user.Name,
-            });
-
-        })
-        .catch((error) => {
-            return res.status(503).json({ message: error });
+const loginPatientByMagicLink = async (req, res) => {
+    try {
+        const user = await Patient.findOne({
+            MagicLink: req.params.token,
         });
 
+        if (!user) {
+            return res.status(404).send({ message: "User Not found." });
+        }
 
-}
+        if (user.MagicLinkExpired) {
+            return res.status(401).send({ message: "Magic Link Expired." });
+        }
 
-module.exports = { registerDoc, loginDoc, loginPatient };
+        user.MagicLinkExpired = true;
+        await user.save();
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.Email,
+                name: user.Name,
+            },
+            process.env.ACCESS_TOKEN_SECRET
+        );
+        return res.status(200).send({
+            message: "User LoggedIn Successfully",
+            id: user.id,
+            token: token,
+            email: user.Email,
+            name: user.Name,
+        });
+    } catch (error) {
+        return res.status(503).json({ message: error });
+    }
+};
+
+module.exports = { registerDoc, loginDoc, loginPatientByMagicLink };
