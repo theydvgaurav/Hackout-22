@@ -33,28 +33,28 @@ const createPrescription = async (req, res) => {
         PatientId = newUser.id;
     }
 
-    console.log('starting uploading files') ;
+    console.log('starting uploading files');
 
     // upload all the attachments provided by the doctor
     const files = req.files.files;
-    console.log(files) ;
-    console.log(typeof(files)) ;
+    console.log(files);
+    console.log(typeof (files));
 
-    const attachments_path =  [] ;
+    const attachments_path = [];
     const media_dir = process.env.MEDIA_DIR
-    for (const file of files){
-        fileData = file.data ;
-        fileType = file.mimetype ;
-        fileName = file.name ;
-        filePath = media_dir + "/" + fileName ;
+    for (const file of files) {
+        fileData = file.data;
+        fileType = file.mimetype;
+        fileName = file.name;
+        filePath = media_dir + "/" + fileName;
 
         // save the file by writing all the data into it
         fs.writeFileSync(filePath, fileData, (err) => {
-            if (err){
-                if(fs.existsSync(filePath)) {
-                    fs.unlinkSync(filePath) ;
+            if (err) {
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
                 }
-                return res.status(500).send({message : err}) ;
+                return res.status(500).send({ message: err });
             }
             else {
                 console.log("File saved successfully.\n");
@@ -62,37 +62,37 @@ const createPrescription = async (req, res) => {
         });
 
         // upload the file to R2 Bucket
-        const upload_resp = uploadFile(filePath, fileType, PatientId) ;
+        const upload_resp = uploadFile(filePath, fileType, PatientId);
         // remove the file from the system
-        if(fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath) ;
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
         }
 
-        if(upload_resp.status == 1){
-            console.log('file uploaded successfully.\n') ;
-            attachments_path.push(upload_resp.data) ;
+        if (upload_resp.status == 1) {
+            console.log('file uploaded successfully.\n');
+            attachments_path.push(upload_resp.data);
         }
-        else{
-            console.log('file failed to upload.\n') ;
-            return res.status(500).send({message : upload_resp.error}) ;
+        else {
+            console.log('file failed to upload.\n');
+            return res.status(500).send({ message: upload_resp.error });
         }
 
     }
 
-    const presignedUrls = [] ;
+    const presignedUrls = [];
 
-    for(const path of attachments_path){
+    for (const path of attachments_path) {
         // upload the file to R2 Bucket
-        const url_generate_resp = getpresignedURL(path) ;
-        
-        if(url_generate_resp.status == 1){
-            console.log('Presigned Url generated successfully.\n') ;
-            console.log(url_generate_resp.data) ;
-            presignedUrls.push(url_generate_resp.data) ;
+        const url_generate_resp = getpresignedURL(path);
+
+        if (url_generate_resp.status == 1) {
+            console.log('Presigned Url generated successfully.\n');
+            console.log(url_generate_resp.data);
+            presignedUrls.push(url_generate_resp.data);
         }
-        else{
-            console.log('Failed to generate Presigned Url.\n') ;
-            return res.status(500).send({message : url_generate_resp.error}) ;
+        else {
+            console.log('Failed to generate Presigned Url.\n');
+            return res.status(500).send({ message: url_generate_resp.error });
         }
     }
 
@@ -117,7 +117,7 @@ const createPrescription = async (req, res) => {
 
 const getAllPrescForPatient = async (req, res) => {
     try {
-        const allPresc = await Presc.find({ PatientId: req.user.id }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
+        const allPresc = await Prescription.find({ PatientId: req.user.id }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
         res.status(200).send({ data: allPresc });
     } catch (error) {
         return res.status(503).json({ message: error });
@@ -141,7 +141,7 @@ const getAllDocs = async (req, res) => {
 
 const getAllPrescForDoc = async (req, res) => {
     try {
-        const allPresc = await Presc.find({ DoctorId: req.doc.id }).select("-DoctorId").populate("PatientId", "-MagicLink -IsActive -MagicLinkExpired -Password -__v")
+        const allPresc = await Prescription.find({ DoctorId: req.doc.id }).select("-DoctorId").populate("PatientId", "-MagicLink -IsActive -MagicLinkExpired -Password -__v")
         res.status(200).send({ data: allPresc });
     } catch (error) {
         console.log(error)
@@ -151,7 +151,7 @@ const getAllPrescForDoc = async (req, res) => {
 
 const getAllPatients = async (req, res) => {
     try {
-        const AllPatients = await Presc.find({ DoctorId: req.doc.id }).distinct(
+        const AllPatients = await Prescription.find({ DoctorId: req.doc.id }).distinct(
             "PatientId"
         );
         const patDetails = await Patient.find()
@@ -166,7 +166,7 @@ const getAllPatients = async (req, res) => {
 
 const getPrecsByDocId = async (req, res) => {
     try {
-        const allPresc = await Presc.find({ PatientId: req.user.id, DoctorId: req.params.doctorId }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
+        const allPresc = await Prescription.find({ PatientId: req.user.id, DoctorId: req.params.doctorId }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
         res.status(200).send({ data: allPresc });
     } catch (error) {
         return res.status(503).json({ message: error });
@@ -175,7 +175,7 @@ const getPrecsByDocId = async (req, res) => {
 
 const getPrecsByPatId = async (req, res) => {
     try {
-        const allPresc = await Presc.find({ PatientId: req.params.patientId, DoctorId: req.doc.id }).select("-DoctorId").populate("PatientId", "-MagicLink -IsActive -MagicLinkExpired -Password -__v")
+        const allPresc = await Prescription.find({ PatientId: req.params.patientId, DoctorId: req.doc.id }).select("-DoctorId").populate("PatientId", "-MagicLink -IsActive -MagicLinkExpired -Password -__v")
         res.status(200).send({ data: allPresc });
     } catch (error) {
         return res.status(503).json({ message: error });
