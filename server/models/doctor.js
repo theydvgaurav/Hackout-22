@@ -2,45 +2,45 @@ const mongoose = require('mongoose');
 
 const DcotorSchema = new mongoose.Schema({
 
-    Name: { 
-		type     : String, 
-		required : false,
-		unique   : false,
-		default  : 'Anonymous'
-	},
-	Email: { 
-		type     : String, 
-		required : true,
-		unique   : true
-	},
+    Name: {
+        type: String,
+        required: false,
+        unique: false,
+        default: 'Anonymous'
+    },
+    Email: {
+        type: String,
+        required: true,
+        unique: true
+    },
     Address: {
-        type : Text,
-        required : true,
-        unique : false
+        type: String,
+        required: false,
+        unique: false
     },
     Gender: {
-        type : String,
-        required : true,
-        unique : false
+        type: String,
+        required: false,
+        unique: false
     },
     Password: {
-        type : String,
-        required : true,
-        unique : false
+        type: String,
+        required: true,
+        unique: false
     },
     PhoneNo: {
-        type : String,
-        required : true,
-        unique : false
+        type: String,
+        required: true,
+        unique: false
     },
     IsActive: {
-        type : Boolean,
-        default : true
+        type: Boolean,
+        default: true
     }
 },
-{strictQuery: false}
+    { strictQuery: false }
 )
 
 
 const Doctors = mongoose.model('Doctors', DcotorSchema);
-module.exports = Doctors ;
+module.exports = Doctors;

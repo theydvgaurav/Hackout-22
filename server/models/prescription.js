@@ -1,22 +1,28 @@
 const mongoose = require('mongoose')
-const Schema   = mongoose.Schema
+const Schema = mongoose.Schema
 
 const PrescriptionSchema = new mongoose.Schema({
 
-    PatientId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Users'
+    PatientId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
     },
-    DoctorId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Doctors'
+    DoctorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Doctors'
     },
-    PresignedUrl : {
-        type : [String],
-        default : []
+    PresignedUrl: {
+        type: [String],
+        default: []
+    },
+    PatientName: {
+        type: String
+    },
+    Description: {
+        type: String
     }
 },
-{strictQuery: false}
+    { strictQuery: false }
 )
 
 const Prescriptions = mongoose.model('Prescriptions', PrescriptionSchema)
