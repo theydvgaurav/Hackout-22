@@ -1,15 +1,16 @@
 require("dotenv").config();
-const Presc = require("../models/prescription");
+const Prescription = require("../models/prescription");
 const Patient = require("../models/user");
 const Doc = require("../models/doctor");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("../config/nodemailer");
+const fs = require("fs");
 
-const uploadFile = require('../utility/fileUpload')
-const presignedURL = require('../utility/presignedUrl')
+const uploadFile = require('../utility/fileUpload').uploadFile
+const getpresignedURL = require('../utility/presignedUrl').getPresignedUrl
 
 const createPrescription = async (req, res) => {
-    // todo file upload to S3 and gen presigned url
+    // todo file upload to R2 Bucket and generate presigned url
 
     const token = jwt.sign(
         {
@@ -32,14 +33,75 @@ const createPrescription = async (req, res) => {
         PatientId = newUser.id;
     }
 
-    const newPresc = new Presc({
+    console.log('starting uploading files') ;
+
+    // upload all the attachments provided by the doctor
+    const files = req.files.files;
+    console.log(files) ;
+    console.log(typeof(files)) ;
+
+    const attachments_path =  [] ;
+    const media_dir = process.env.MEDIA_DIR
+    for (const file of files){
+        fileData = file.data ;
+        fileType = file.mimetype ;
+        fileName = file.name ;
+        filePath = media_dir + "/" + fileName ;
+
+        // save the file by writing all the data into it
+        fs.writeFileSync(filePath, fileData, (err) => {
+            if (err){
+                if(fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath) ;
+                }
+                return res.status(500).send({message : err}) ;
+            }
+            else {
+                console.log("File saved successfully.\n");
+            }
+        });
+
+        // upload the file to R2 Bucket
+        const upload_resp = uploadFile(filePath, fileType, PatientId) ;
+        // remove the file from the system
+        if(fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath) ;
+        }
+
+        if(upload_resp.status == 1){
+            console.log('file uploaded successfully.\n') ;
+            attachments_path.push(upload_resp.data) ;
+        }
+        else{
+            console.log('file failed to upload.\n') ;
+            return res.status(500).send({message : upload_resp.error}) ;
+        }
+
+    }
+
+    const presignedUrls = [] ;
+
+    for(const path of attachments_path){
+        // upload the file to R2 Bucket
+        const url_generate_resp = getpresignedURL(path) ;
+        
+        if(url_generate_resp.status == 1){
+            console.log('Presigned Url generated successfully.\n') ;
+            presignedUrls.push(url_generate_resp.data) ;
+        }
+        else{
+            console.log('Failed to generate Presigned Url.\n') ;
+            return res.status(500).send({message : url_generate_resp.error}) ;
+        }
+    }
+
+    const newPresc = new Prescription({
         PatientId: PatientId,
         DoctorId: req.doc.id,
-        PresignedUrl: "",
+        presignedURL: presignedUrls,
         PatientName: req.body.name,
         Description: req.body.description,
     });
-
     // todo send email to patient
 
     newPresc
@@ -63,7 +125,7 @@ const getAllPrescForPatient = async (req, res) => {
 
 const getAllDocs = async (req, res) => {
     try {
-        const allDocs = await Presc.find({ PatientId: req.user.id }).distinct(
+        const allDocs = await Prescription.find({ PatientId: req.user.id }).distinct(
             "DoctorId"
         );
         const docDetails = await Doc.find()
