@@ -1,7 +1,8 @@
 const auth = require('./auth')
+const presc = require('./prescription')
 
 module.exports = {
     registerDoc: auth.registerDoc,
-    registerPatient: auth.registerPatient,
-    loginDoc: auth.loginDoc
+    loginDoc: auth.loginDoc,
+    createPrescription: presc.createPrescription
 }
