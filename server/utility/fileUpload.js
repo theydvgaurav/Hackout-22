@@ -29,15 +29,15 @@ const uploadFile = (filePath, contentType, userId) => {
             Body: fileData,
             "ContentType": contentType
         }, (error, success) => {
-            if(error) console.log(error) ;
-            console.log(success) ;
+            if (error) console.log(error);
+            // console.log(success) ;
         })
 
-        return  {"status": 1, "data" :  keyName }
-      
+        return { "status": 1, "data": keyName }
+
 
     } catch (error) {
-        return {"status": 0 , "error" :  error }
+        return { "status": 0, "error": error }
     }
 }
 
