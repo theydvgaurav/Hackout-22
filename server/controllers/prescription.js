@@ -52,7 +52,16 @@ const createPrescription = async (req, res) => {
         });
 };
 
-const getAllPresc = async (req, res) => {
+const getAllPrescForPatient = async (req, res) => {
+    try {
+        const allPresc = await Presc.find({ PatientId: req.user.id }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
+        res.status(200).send({ data: allPresc });
+    } catch (error) {
+        return res.status(503).json({ message: error });
+    }
+};
+
+const getAllDocs = async (req, res) => {
     try {
         const allDocs = await Presc.find({ PatientId: req.user.id }).distinct(
             "DoctorId"
@@ -60,11 +69,57 @@ const getAllPresc = async (req, res) => {
         const docDetails = await Doc.find()
             .where("_id")
             .in(allDocs)
-            .select("Name Email Phone Email");
+            .select("Name Email");
         res.status(200).send({ data: docDetails });
     } catch (error) {
         return res.status(503).json({ message: error });
     }
 };
 
-module.exports = { createPrescription, getAllPresc };
+const getAllPrescForDoc = async (req, res) => {
+    try {
+        const allPresc = await Presc.find({ DoctorId: req.doc.id }).select("-DoctorId").populate("PatientId", "-MagicLink -IsActive -MagicLinkExpired -Password -__v")
+        res.status(200).send({ data: allPresc });
+    } catch (error) {
+        console.log(error)
+        return res.status(503).json({ message: error });
+    }
+};
+
+const getAllPatients = async (req, res) => {
+    try {
+        const AllPatients = await Presc.find({ DoctorId: req.doc.id }).distinct(
+            "PatientId"
+        );
+        const patDetails = await Patient.find()
+            .where("_id")
+            .in(AllPatients)
+            .select("Name Email");
+        res.status(200).send({ data: patDetails });
+    } catch (error) {
+        return res.status(503).json({ message: error });
+    }
+};
+
+const getPrecsByDocId = async (req, res) => {
+    try {
+        const allPresc = await Presc.find({ PatientId: req.user.id, DoctorId: req.params.doctorId }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
+        res.status(200).send({ data: allPresc });
+    } catch (error) {
+        return res.status(503).json({ message: error });
+    }
+}
+
+const getPrecsByPatId = async (req, res) => {
+    try {
+        const allPresc = await Presc.find({ PatientId: req.params.patientId, DoctorId: req.doc.id }).select("-DoctorId").populate("PatientId", "-MagicLink -IsActive -MagicLinkExpired -Password -__v")
+        res.status(200).send({ data: allPresc });
+    } catch (error) {
+        return res.status(503).json({ message: error });
+    }
+}
+
+
+
+
+module.exports = { createPrescription, getAllPrescForPatient, getAllDocs, getAllPrescForDoc, getAllPatients, getPrecsByDocId, getPrecsByPatId };
