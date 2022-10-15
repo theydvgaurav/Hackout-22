@@ -13,4 +13,10 @@ router.post('/login-doc', [controllers.loginDoc]);
 // create a prescription
 router.post('/create-presc', [middlewares.verifyDocToken.tokenValidation], [controllers.createPrescription])
 
+// login a patient
+router.post('/login-pat/:token', [controllers.loginPatient])
+
+router.get('/get-pat-prec', [middlewares.verifyUserToken.tokenValidation], [controllers.getAllPresc])
+
+
 module.exports = router
