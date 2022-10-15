@@ -4,17 +4,16 @@ const transport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        pass: process.env.MAIL_PASS
     },
 });
 
-module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
-    transport.sendMail({
-        from: user,
+module.exports.sendEmail = async (docName, email, token) => {
+    await transport.sendMail({
+        from: process.env.MAIL_USER,
         to: email,
-        subject: "Please confirm your account",
-        html: `<h1>Email Confirmation</h1>
-        <h2>Hello ${name}</h2>
-        </div>`,
+        subject: `${docName} Shared Reports with you`,
+        html: `<h2>Hello!</h2>
+        <div>Dr ${docName} shared reports with you. <br/> Visit <a href=http://localhost:3000/login-pat/${token}>this link</a> to view them.</div>`,
     }).catch(err => console.log(err));
 };

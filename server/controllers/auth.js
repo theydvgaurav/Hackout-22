@@ -75,8 +75,10 @@ const loginDoc = async (req, res) => {
 const loginPatientByMagicLink = async (req, res) => {
     try {
         const user = await Patient.findOne({
-            MagicLink: req.params.token,
+            MagicLink: req.params.token
         });
+
+        console.log(user)
 
         if (!user) {
             return res.status(404).send({ message: "User Not found." });
