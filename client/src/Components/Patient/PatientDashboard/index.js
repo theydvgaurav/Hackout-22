@@ -17,8 +17,7 @@ const PatientDashboard = () => {
             url: 'http://localhost:5000/get-docs',
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${userInfo.token}`
-                Authorization: auth
+                Authorization: `Bearer ${userInfo.token}`
             },
         };
 

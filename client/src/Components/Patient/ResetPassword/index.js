@@ -10,7 +10,7 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState('');
 
-    const auth = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGFiNGVmNmRjMjI3ZTU0NDczMTYxZSIsImVtYWlsIjoiZmhkZ3NoQGpoamYuZmRnamRmIiwibmFtZSI6IkFOdWoiLCJpYXQiOjE2NjU4NTIzMzl9.c2zqpLpfsPnmViZ29FjNBo9pWNTafUrCusV0hubg_zY';
+    const userInfo = JSON.parse(localStorage.getItem("patientInformation"));
     
     const {email} = state;
 
@@ -30,7 +30,7 @@ const ResetPassword = () => {
             url: 'http://localhost:5000/update-password',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: auth
+                Authorization: `Bearer ${userInfo.token}`
             },
             data: data
         };

@@ -37,7 +37,7 @@ const DoctorDashboard = () => {
         //     url: 'http://localhost:5000/create-presc',
         //     headers: {
         //         'Content-Type': 'application/json',
-        //         Authorization: auth
+        //         Authorization: `Bearer ${doctorInfo.token}`
         //     },
         //     data: formData
         // };
@@ -51,7 +51,6 @@ const DoctorDashboard = () => {
         //         console.log(error);
         //     });
 
-        // console.log(description);
     }
 
     const getPatientsData = async () => {

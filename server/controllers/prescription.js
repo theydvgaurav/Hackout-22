@@ -212,6 +212,7 @@ const getAllPatients = async (req, res) => {
 
 const getPrecsByDocId = async (req, res) => {
     try {
+        console.log(req.user.id,  req.params.doctorId )
         const allPresc = await Prescription.find({ PatientId: req.user.id, DoctorId: req.params.doctorId }).select("-PatientId").populate("DoctorId", "-Password -IsActive -__v -Email -PhoneNo")
         res.status(200).send({ data: allPresc });
     } catch (error) {
