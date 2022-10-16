@@ -61,7 +61,7 @@ const PrescriptionDetails = () => {
     <div className='prescriptionDetailsMainContainer'>
       {
         prescriptionsArray.map(curr => {
-          // console.log(curr.presignedURL[0]);
+          console.log(curr.presignedURL[0], "URL");
           return (
             <div className='patientDetailsContainer' key={curr._id}>
               <div
