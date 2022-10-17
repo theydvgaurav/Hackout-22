@@ -66,7 +66,7 @@ const PrescriptionDoctorDetails = () => {
     })
   }
 
-  console.log(prescriptionsArray);
+  // console.log(prescriptionsArray);
 
   useEffect(() => {
     getData()

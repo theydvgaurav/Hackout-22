@@ -1,90 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from "file-saver";
-import axios from 'axios'
 
 const DownloadFile = props => {
-    const url = props.curr;
-
-    console.log(url, props,"test-url");
-
-    const [downloadUrl, setDownloadUrl] = useState('');
-
-    const downDoc = (docId) => async dispatch => {
-    
-        const res = await axios({ url: url, method: 'GET', responseType: 'blob' })
-        .then((response) => {
-          console.log(response)
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', `${docId.originalName}`);
-          document.body.appendChild(link);
-          link.click();
-        });
-    }
-
-    useEffect(() => {
-        console.log(downDoc("it"))
-        // fetch(url, { 
-        //     mode: 'no-cors',
-        //     })
-        // .then(response => {
-        //     console.log(response, "response");
-        //     response.blob().then(data =>)
-        // })
-        // .then(blob => {
-        //     console.log(blob, "blob");
-        //   const url = window.URL.createObjectURL(new Blob([blob]));
-        //   console.log(url);
-        //   setDownloadUrl(url);
-        // });
-    }, []);
-
-    // const onButtonClick = () => {
-    //     // using Java Script method to get PDF file
-    //     fetch(url).then(response => {
-    //         response.blob().then(blob => {
-    //             // Creating new object of PDF file
-    //             const fileURL = window.URL.createObjectURL(blob);
-    //             // Setting various property values
-    //             let alink = document.createElement('a');
-    //             alink.href = fileURL;
-    //             alink.download = 'SamplePDF.pdf';
-    //             alink.click();
-    //         })
-    //     })
-    // }
+    console.log(props);
+    const {curr} = props;
 
     const getFileExtension = fileName => {
-        console.log(fileName);
-        const fileIndex = fileName.indexOf('.');
-        const name = fileName.substring(fileIndex);
-        const check = ['.pdf', '.jpg', '.png', '.jpeg'].includes(name);
-        if (check) return name;
-        return '.pdf';
+        if (fileName.includes('.pdf')) {
+            return '.pdf';
+        } else if (fileName.includes('.jpg')) {
+            return '.jpg';
+        } else if (fileName.includes('.jpeg')) {
+            return '.jpeg';
+        } else if (fileName.includes('.png')) {
+            return '.png';
+        }
     };
 
-    // const saveFile = () => {
-    //     saveAs(
-    //       url,
-    //       "abc.pdf"
-    //     );
-    //   };
+    const downloadImage = (newUrl) => {
+        saveAs(newUrl, `image_${getFileExtension(newUrl)}`);
+    }
 
     return (
-        <div>
-            {/* <button onClick={saveFile}>download</button> */}
-            <a
-                href={downloadUrl}
-                // download={`abc_${getFileExtension(url)}`}
-                download='abc.pdf'
+        <div className='patientDetailsContainer' >
+            <div className='patientDetailsSubContainer'>
+                <div className='patientDetailsname'>
+                    <div>Patient Name: {curr.PatientName}</div>
+                    <div>Doctor Name: {curr.DoctorId.Name}</div>
+                    <div>Description: {curr.Description}</div>
+                </div>
+            </div>
+            <div
+                className='patientDetailsDownload'
+                onClick={() => downloadImage(curr.presignedURL[0])}
             >
-                <div>Download</div>
-
-            </a>
-            {/* <button onClick={onButtonClick}>
-                Download PDF
-            </button> */}
+                Download
+            </div>
         </div>
     );
 };
