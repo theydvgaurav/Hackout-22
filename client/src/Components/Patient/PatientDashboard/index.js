@@ -9,8 +9,7 @@ const PatientDashboard = () => {
     const userInfo = JSON.parse(localStorage.getItem("patientInformation"));
 
     const [doctorsArray, setDoctorsArray] = useState([]);
-    const auth = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGFiNGVmNmRjMjI3ZTU0NDczMTYxZSIsImVtYWlsIjoiZmhkZ3NoQGpoamYuZmRnamRmIiwibmFtZSI6IkFOdWoiLCJpYXQiOjE2NjU4NTIzMzl9.c2zqpLpfsPnmViZ29FjNBo9pWNTafUrCusV0hubg_zY';
-
+    
     const getDoctorsData = async () => {
         const config = {
             method: 'get',
@@ -22,7 +21,6 @@ const PatientDashboard = () => {
         };
 
         axios(config).then(res => {
-            console.log(res.data);
             setDoctorsArray(res.data.data)
         }).catch(err => {
             console.log(err);
@@ -33,9 +31,6 @@ const PatientDashboard = () => {
         getDoctorsData()
 
     }, [])
-
-    console.log(doctorsArray);
-
 
     const _onSignOut = () => {
         localStorage.removeItem("patientInformation");
@@ -54,18 +49,16 @@ const PatientDashboard = () => {
         <div className='mainDashboardContainer'>
             <div className='mainHeader'>
                 <div className='mainHeaderName'>Patient-Portal</div>
-                {/* {userInfo && */}
                 <div className='mainHeaderSignOut' onClick={_onSignOut}>Sign Out</div>
                 <div className='updatePassword' onClick={() => _updatePasswordClick('anuj11911013@gmail.com')}>Update Password</div>
-                {/* } */}
             </div>
             <div className='doctorsContainer'>
                 <div className='doctorListHeader'>Doctor Details</div>
                 {
                     doctorsArray.map(curr => {
                         return (
-                            <div className='patientDetailsContainer'>
-                                <div onClick={() => _onPatientDetails(curr._id)} className='patientDetailsSubContainer'>
+                            <div className='patientDetailsDoctorContainer'>
+                                <div onClick={() => _onPatientDetails(curr._id)} className='patientDetailsSubChildContainer'>
                                     <div className='patientDetailsname'>{curr.Name}</div>
                                     <div className='patientDetailsname'>{curr.Email}</div>
                                 </div>

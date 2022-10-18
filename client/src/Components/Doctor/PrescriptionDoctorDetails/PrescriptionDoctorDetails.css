@@ -1,0 +1,19 @@
+.patientDetailsContainer {
+    border: 3px solid black;
+    display: flex;
+    margin: 0 auto;
+    min-width: 800px;
+    max-width: 800px;
+    padding: 15px 30px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    /* cursor: pointer; */
+}
+
+.prescriptionDetailsMainContainer {
+    margin-top: 30px;
+}
+
+.patientDetailsChildContainer {
+    width: 50%;
+}

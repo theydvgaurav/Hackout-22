@@ -1,8 +1,8 @@
 import React from 'react';
 import { saveAs } from "file-saver";
 
-const DownloadFile = props => {
-    const {curr} = props;
+const DownloadFileDoctor = props => {
+    const { curr } = props;
 
     const getFileExtension = fileName => {
         if (fileName.includes('.pdf')) {
@@ -25,7 +25,6 @@ const DownloadFile = props => {
             <div className='patientDetailsChildContainer'>
                 <div className='patientDetailsname'>
                     <div>Patient Name: {curr.PatientName}</div>
-                    <div>Doctor Name: {curr.DoctorId.Name}</div>
                     <div>Description: {curr.Description}</div>
                 </div>
             </div>
@@ -39,4 +38,4 @@ const DownloadFile = props => {
     );
 };
 
-export default DownloadFile;
+export default DownloadFileDoctor;
