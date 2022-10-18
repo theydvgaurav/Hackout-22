@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { FileUploader } from "react-drag-drop-files";
 import { useNavigate } from 'react-router-dom';
-import PatientDetailsCard from '../PatientDetailsCard';
 import './DoctorDashboard.css';
 
 const DoctorDashboard = () => {
@@ -19,9 +18,6 @@ const DoctorDashboard = () => {
     const handleChange = (file) => {
         setFilesArray([...filesArray, file[0]])
     };
-    console.log(filesArray);
-
-    // const auth = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGFiNGVmNmRjMjI3ZTU0NDczMTYxZSIsImVtYWlsIjoiZmhkZ3NoQGpoamYuZmRnamRmIiwibmFtZSI6IkFOdWoiLCJpYXQiOjE2NjU4NTIzMzl9.c2zqpLpfsPnmViZ29FjNBo9pWNTafUrCusV0hubg_zY';
 
     const doctorInfo = JSON.parse(localStorage.getItem("doctorInformation"));
 
@@ -64,7 +60,6 @@ const DoctorDashboard = () => {
         };
 
         axios(config).then(res => {
-            console.log(res.data);
             setPatientsArray(res.data.data)
         }).catch(err => {
             console.log(err);
@@ -152,21 +147,18 @@ const DoctorDashboard = () => {
             </div>
             <div className='clientDetails'>
                 <div className='patientDetails'>Patient Details</div>
-                <div className='patientDetailsContainer'>
-                    {/* <PatientDetailsCard /> */}
-                    {
-                        patientsArray.map(curr => {
-                            return (
-                                <div className='patientDetailsContainer' key={curr._id}>
-                                    <div onClick={() => _onPatientDetails(curr._id)} className='patientDetailsSubContainer'>
-                                        <div className='patientDetailsname'>{curr.Name}</div>
-                                        <div className='patientDetailsname'>{curr.Email}</div>
-                                    </div>
+                {
+                    patientsArray.map(curr => {
+                        return (
+                            <div onClick={() => _onPatientDetails(curr._id)} className='patientDetailsDoctorContainer' key={curr._id}>
+                                <div className='patientDetailsSubChildContainer'>
+                                    <div className='patientDetailsname'>{curr.Name}</div>
+                                    <div className='patientDetailsname'>{curr.Email}</div>
                                 </div>
-                            );
-                        })
-                    }
-                </div>
+                            </div>
+                        );
+                    })
+                }
             </div>
         </div>
     )

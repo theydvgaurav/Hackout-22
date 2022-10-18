@@ -9,3 +9,26 @@
     display: flex;
     justify-content: center;
 }
+
+.patientDetailsSubContainer {
+    display: flex;
+}
+
+.patientDetailsDoctorContainer {
+    border: 3px solid black;
+    margin: 0 auto;
+    min-width: 800px;
+    max-width: 800px;
+    padding: 15px 30px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.patientDetailsSubChildContainer {
+    display: flex;
+}
+
+.patientDetailsSubChildContainer > .patientDetailsname {
+    width: 50%;
+}

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-// import { Spinner } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 const ConfirmPatient = () => {
     const [loading, setLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem("patientInformation"));
-
     const history = useNavigate();
+    const navigate = useNavigate();
+    
 
     var URL = window.location.href.split('/');
 
@@ -15,12 +15,12 @@ const ConfirmPatient = () => {
     const apiCall = async () => {
         setLoading(true);
         const res = await axios.post('http://localhost:5000/login-pat/' + confirmationCode)
-        localStorage.setItem('patientInformation', JSON.stringify(res));
-        console.log(localStorage.getItem('patientInformation', JSON.stringify(res)))
+        localStorage.setItem('patientInformation', JSON.stringify(res.data));
         const userInfo = JSON.parse(localStorage.getItem("patientInformation"));
         setLoading(false);
         if (userInfo) {
-            history("/patient-portal");
+            const email = res.data.email;
+            navigate('/update-password-patient', { state: {email} });
         }
     }
     useEffect(() => {

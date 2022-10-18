@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { FileUploader } from "react-drag-drop-files";
 import './PrescriptionDoctorDetails.css'
+import DownloadFileDoctor from '../DownloadFileDoctor';
 
 const PrescriptionDoctorDetails = () => {
   const params = useParams();
@@ -66,8 +67,6 @@ const PrescriptionDoctorDetails = () => {
     })
   }
 
-  // console.log(prescriptionsArray);
-
   useEffect(() => {
     getData()
   }, [params.id])
@@ -127,25 +126,13 @@ const PrescriptionDoctorDetails = () => {
         }
 
       </div>
-      {
-        prescriptionsArray.map(curr => {
-          return (
-            <div className='patientDetailsContainer' key={curr._id}>
-              <div
-                // onClick={() => _onPatientDetails(curr._id)} 
-                className='patientDetailsSubContainer'
-              >
-                <div className='patientDetailsname'>
-                  <div>Patient Name: {curr.PatientName}</div>
-                  <div>Description: {curr.Description}</div>
-                </div>
-
-                <div className='patientDetailsDownload'>Download Report</div>
-              </div>
-            </div>
-          );
-        })
-      }
+      <div className='prescriptionDetailsMainContainer'>
+        {
+          prescriptionsArray.map((curr, i) =>
+            <DownloadFileDoctor curr={curr} index={i} key={curr._id} />
+          )
+        }
+      </div>
     </div>
   )
 }

@@ -30,7 +30,6 @@ const PatientLogin = () => {
 
         axios(config)
             .then(function (response) {
-                console.log(response.data);
                 localStorage.setItem("patientInformation", JSON.stringify(response.data));
                 history('/patient-portal')
             })

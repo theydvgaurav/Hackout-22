@@ -14,8 +14,6 @@ const ResetPassword = () => {
     
     const {email} = state;
 
-    console.log(email);
-
     const submitForm = async (e) => {
         e.preventDefault();
 
@@ -37,8 +35,6 @@ const ResetPassword = () => {
 
         axios(config)
             .then(function (response) {
-                console.log(response.data);
-                // localStorage.setItem("doctorInformation", JSON.stringify(response.data));
                 history('/patient-portal')
             })
             .catch(function (error) {

@@ -32,7 +32,6 @@ const DoctorRegistration = () => {
 
         axios(config)
             .then(function (response) {
-                console.log(response.data);
                 localStorage.setItem("doctorInformation", JSON.stringify(response.data));
                 history('/doctor-portal')
             })
