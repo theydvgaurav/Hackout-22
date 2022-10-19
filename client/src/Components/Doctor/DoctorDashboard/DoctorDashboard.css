@@ -99,3 +99,16 @@
     font-weight: 600;
     margin-bottom: 10px;
 }
+
+.fileInput {
+    background-color: white;
+    border: none;
+}
+
+input[type="file"] {
+    background-color: white;
+    border: none;
+    width: 200px;
+    height: 80px;
+    border-radius: 10px solid black;
+}

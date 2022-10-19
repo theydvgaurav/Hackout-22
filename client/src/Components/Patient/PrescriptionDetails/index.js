@@ -33,6 +33,7 @@ const PrescriptionDetails = () => {
 
   return (
     <div className='prescriptionDetailsMainContainer'>
+      <div className='doctorNameInPatientDashboard'>{prescriptionsArray.length > 0 && <div>Dr. {prescriptionsArray[0].DoctorId.Name}</div>}</div>
       {
         prescriptionsArray.map((curr, i) =>
           <DownloadFile curr={curr} index={i} key={curr._id} />

@@ -27,9 +27,14 @@ const PatientDashboard = () => {
         })
     }
 
+    useEffect(()=> {
+        const userInfo = JSON.parse(localStorage.getItem("patientInformation"));
+        if(!userInfo)
+            history('/')
+    },[history])
+
     useEffect(() => {
         getDoctorsData()
-
     }, [])
 
     const _onSignOut = () => {

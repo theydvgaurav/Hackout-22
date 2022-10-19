@@ -1,13 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { FileUploader } from "react-drag-drop-files";
 import './PrescriptionDoctorDetails.css'
 import DownloadFileDoctor from '../DownloadFileDoctor';
 
 const PrescriptionDoctorDetails = () => {
   const params = useParams();
-
   const [prescriptionsArray, setPrescriptionsArray] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [filesArray, setFilesArray] = useState([]);
@@ -17,38 +15,42 @@ const PrescriptionDoctorDetails = () => {
 
   const doctorInfo = JSON.parse(localStorage.getItem("doctorInformation"));
 
-  const fileTypes = ["JPEG", "PNG", "GIF", "PDF"];
-
-  const handleChange = (file) => {
-    setFilesArray([...filesArray, file[0]])
-  };
+  const handleChange = (e) => {
+    setFilesArray([...filesArray, ...e.target.files])
+};
 
   const _onUploadFiles = () => {
     const formData = new FormData();
-    formData.append('category', 'prescriptions');
-    filesArray.map(cur => (
-      formData.append('files', cur)
-    ));
+    filesArray.map(cur => {
+      return (
+        formData.append('files', cur)
+      )
+    });
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('description', description);
 
-    // const config = {
-    //     method: 'post',
-    //     url: 'http://localhost:5000/create-presc',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${doctorInfo.token}`
-    //     },
-    //     data: formData
-    // };
+    console.log(name, email, description, formData);
 
-    // axios(config)
-    //     .then(function (response) {
-    //         console.log(response.data);
-    //         history('/doctor-portal')
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error);
-    //     });
+    const config = {
+      method: 'post',
+      url: 'http://localhost:5000/create-presc',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${doctorInfo.token}`
+      },
+      data: formData
+    };
 
+    axios(config)
+      .then( response => {
+        setOpenModal(!openModal)
+        console.log(response.data);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   const getData = async () => {
@@ -61,7 +63,8 @@ const PrescriptionDoctorDetails = () => {
       }
     };
     axios(config).then(res => {
-      setPrescriptionsArray(res.data.data)
+      setPrescriptionsArray(res.data.data);
+      setEmail(res.data.data[0].PatientId.Email)
     }).catch(err => {
       console.log(err);
     })
@@ -93,7 +96,7 @@ const PrescriptionDoctorDetails = () => {
                   type="email"
                   onChange={e => setEmail(e.target.value)}
                   placeholder="Email"
-                  value={prescriptionsArray ? prescriptionsArray[0].PatientId.Email : ''}
+                  value={email}
                   required
                 />
               </div>
@@ -107,12 +110,11 @@ const PrescriptionDoctorDetails = () => {
                 />
               </div>
 
-              <FileUploader
-                multiple={true}
-                handleChange={handleChange}
-                name="file"
-                types={fileTypes}
-                maxSize="5"
+              <input
+                type="file"
+                accept='application/pdf, image/png, image/jpg, image/jpeg'
+                onChange={handleChange}
+                multiple
               />
             </form>
 

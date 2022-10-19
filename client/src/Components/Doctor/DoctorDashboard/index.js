@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { FileUploader } from "react-drag-drop-files";
 import { useNavigate } from 'react-router-dom';
 import './DoctorDashboard.css';
 
@@ -13,39 +12,45 @@ const DoctorDashboard = () => {
     const [description, setDescription] = useState('')
     const [patientsArray, setPatientsArray] = useState([]);
 
-    const fileTypes = ["JPEG", "PNG", "GIF", "PDF"];
-
-    const handleChange = (file) => {
-        setFilesArray([...filesArray, file[0]])
+    const handleChange = (e) => {
+        setFilesArray([...filesArray, ...e.target.files])
     };
 
     const doctorInfo = JSON.parse(localStorage.getItem("doctorInformation"));
 
     const _onUploadFiles = () => {
         const formData = new FormData();
-        formData.append('category', 'prescriptions');
-        filesArray.map(cur => (
-            formData.append('files', cur)
-        ));
+        filesArray.map(cur => {
+            return (
+                formData.append('files', cur)
+            )
+        });
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('description', description);
 
-        // const config = {
-        //     method: 'post',
-        //     url: 'http://localhost:5000/create-presc',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         Authorization: `Bearer ${doctorInfo.token}`
-        //     },
-        //     data: formData
-        // };
+        console.log(name, email, description, formData);
 
-        // axios(config)
-        //     .then(function (response) {
-        //         console.log(response.data);
-        //         history('/doctor-portal')
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
+        const config = {
+            method: 'post',
+            url: 'http://localhost:5000/create-presc',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${doctorInfo.token}`
+            },
+            data: formData
+        };
+
+        axios(config)
+            .then(function (response) {
+                setOpenModal(!openModal)
+                console.log(response.data);
+                // history('/doctor-portal')
+                window.location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
     }
 
@@ -126,12 +131,12 @@ const DoctorDashboard = () => {
                                 />
                             </div>
 
-                            <FileUploader
-                                multiple={true}
-                                handleChange={handleChange}
-                                name="file"
-                                types={fileTypes}
-                                maxSize="5"
+                            <input 
+                                type="file" 
+                                accept='application/pdf, image/png, image/jpg, image/jpeg'
+                                onChange={handleChange}
+                                multiple
+                                className='fileInput'
                             />
                         </form>
 
@@ -139,7 +144,7 @@ const DoctorDashboard = () => {
 
                 }
                 {
-                    filesArray.length > 0 && email && description && openModal && <div className='buttonContainer'>
+                    filesArray.length > 0 && email && description && openModal && name && <div className='buttonContainer'>
                         <div className='uploadButton' onClick={_onUploadFiles}>Upload</div>
                     </div>
                 }

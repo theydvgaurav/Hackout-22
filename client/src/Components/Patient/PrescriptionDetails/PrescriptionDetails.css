@@ -9,3 +9,16 @@
     align-items: center;
     justify-content: center;
 }
+
+.doctorNameInPatientDashboard {
+    font-size: 26px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    min-width: 800px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
