@@ -16,9 +16,10 @@ const DownloadFileDoctor = props => {
         }
     };
 
-    const downloadImage = (newUrl) => {
-        saveAs(newUrl, `image_${getFileExtension(newUrl)}`);
-    }
+    const handleChange = event => {
+        saveAs(event.target.value, `image_${getFileExtension(event.target.value)}`);
+    };
+
 
     return (
         <div className='patientDetailsContainer' >
@@ -28,11 +29,20 @@ const DownloadFileDoctor = props => {
                     <div>Description: {curr.Description}</div>
                 </div>
             </div>
-            <div
-                className='patientDetailsDownload'
-                onClick={() => downloadImage(curr.presignedURL[0])}
-            >
-                Download
+            <div className='selectDiv'>
+                <select
+                    onChange={handleChange}
+                    name="prescription"
+                    id="prescription-select"
+                    className='select'
+                >
+                    <option value="none" selected disabled hidden>Select a File to download</option>
+                    {curr.presignedURL.map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
             </div>
         </div>
     );
