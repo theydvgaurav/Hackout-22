@@ -17,7 +17,11 @@ const DownloadFileDoctor = props => {
     };
 
     const handleSelectChange = event => {
-        saveAs(event.target.value, `image_${getFileExtension(event.target.value)}`);
+        fetch(event.target.value)
+        .then(res => res.blob())
+        .then((blob) => {
+            saveAs(blob, `image_${getFileExtension(event.target.value)}`);
+        })
     };
 
 
