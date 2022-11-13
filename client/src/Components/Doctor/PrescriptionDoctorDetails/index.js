@@ -82,7 +82,7 @@ const PrescriptionDoctorDetails = () => {
         </div>
         {
           openModal ? <div className='fileUpload'>
-            <form>
+            <form className='form'>
               <div className='inputNameBox'>
                 <input
                   type="text"

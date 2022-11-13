@@ -7,7 +7,6 @@
     padding: 15px 30px;
     margin-bottom: 10px;
     font-size: 18px;
-    /* cursor: pointer; */
     align-items: center;
 }
 
@@ -30,4 +29,43 @@
     display: inline-block;
     background-color: white;
     font-size: 15px;
+}
+
+@media screen and (max-width: 900px) {
+    .patientDetailsContainer {
+        min-width: 400px;
+        max-width: 600px;
+    }
+
+    .select {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 690px) {
+    .patientDetailsContainer {
+        min-width: 300px;
+        max-width: 300px;
+    }
+
+    .patientDetailsContainer {
+        min-width: 270px;
+        max-width: 280px;
+        padding: 10px;
+        flex-direction: column;
+        font-size: 16px;
+    }
+
+    .patientDetailsChildContainer {
+        width: 100%;
+    }
+    
+    .selectDiv {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .select {
+        width: 250px;
+    }
 }

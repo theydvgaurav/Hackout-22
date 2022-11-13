@@ -29,6 +29,31 @@
     display: flex;
 }
 
-.patientDetailsSubChildContainer > .patientDetailsname {
+.patientDetailsSubChildContainer>.patientDetailsname {
     width: 50%;
+}
+
+@media screen and (max-width: 900px) {
+    .patientDetailsDoctorContainer {
+        min-width: 400px;
+        max-width: 600px;
+    }
+}
+
+@media screen and (max-width: 690px) {
+    .patientDetailsSubChildContainer {
+        flex-direction: column;
+    }
+
+    .patientDetailsDoctorContainer {
+        min-width: 280px;
+        max-width: 280px;
+        padding: 10px 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .patientDetailsSubChildContainer>.patientDetailsname {
+        width: 100%;
+    }
 }
